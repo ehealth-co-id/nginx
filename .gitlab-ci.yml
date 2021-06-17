@@ -1,0 +1,20 @@
+#image: docker:stable
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+build-master:
+   stage: build
+   only:
+     - master
+   script:
+     - docker build --build-arg http_proxy=http://167.205.35.99:10000 --build-arg https_proxy=http://167.205.35.99:10000 -t gitlab.informatika.org:4567/situng-kpu/situng-2019/docker-loadbalancer:$CI_COMMIT_SHORT_SHA .
+     - docker push gitlab.informatika.org:4567/situng-kpu/situng-2019/docker-loadbalancer:$CI_COMMIT_SHORT_SHA
+
+build-alpine-3.8:
+   stage: build
+   only:
+     - alpine-3.8
+   script:
+     - docker build --build-arg http_proxy=http://167.205.35.99:10000 --build-arg https_proxy=http://167.205.35.99:10000 -t gitlab.informatika.org:4567/situng-kpu/situng-2019/docker-loadbalancer:$CI_COMMIT_SHORT_SHA .
+     - docker push gitlab.informatika.org:4567/situng-kpu/situng-2019/docker-loadbalancer:$CI_COMMIT_SHORT_SHA
